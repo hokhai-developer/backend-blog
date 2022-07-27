@@ -10,13 +10,6 @@ class SiteController {
         res.status(400).json({ error: "ERROR!!!" });
       }
     });
-    // Course.find({}, function (error, course) {
-    //   if (!error) {
-    //     res.json(course);
-    //   } else {
-    //     res.status(400).json({ error: "error message" });
-    //   }
-    // });
     // res.render("home");
   }
   //[GET] /search
