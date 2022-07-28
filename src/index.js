@@ -10,6 +10,10 @@ const db = require("./config/db");
 db.connect();
 //static files
 app.use(express.static(path.join(__dirname, "public")));
+// for parsing application/json
+app.use(express.json());
+// for parsing application/x-www-form-urlencoded
+app.use(express.urlencoded({ extended: true }));
 // HTTP logger
 app.use(morgan("combined"));
 // Template engine
