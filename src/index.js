@@ -6,6 +6,8 @@ const app = express();
 const port = 3000;
 const route = require("./routes");
 const db = require("./config/db");
+const methodOverride = require("method-override");
+
 //connect to DB
 db.connect();
 //static files
@@ -14,13 +16,18 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(express.json());
 // for parsing application/x-www-form-urlencoded
 app.use(express.urlencoded({ extended: true }));
+// override with POST having ?_method=DELETE
+app.use(methodOverride("_method"));
 // HTTP logger
-app.use(morgan("combined"));
+// app.use(morgan("combined"));
 // Template engine
 app.engine(
   "hbs",
   handlebars.engine({
     extname: ".hbs",
+    helpers: {
+      sum: (a, b) => a + b,
+    },
   })
 );
 app.set("view engine", "hbs");

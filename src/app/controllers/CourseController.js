@@ -1,5 +1,6 @@
 const Courses = require("../models/Course");
 const { mongooseToObject } = require("../../util/mongoose");
+const { renderSync } = require("node-sass");
 
 class CourseController {
   //[GET] /courses/create
@@ -27,6 +28,27 @@ class CourseController {
         });
       })
       .catch((error) => next(error));
+  }
+
+  //[GET] /courses/:id/edit
+  edit(req, res, next) {
+    const id = req.params.id;
+    Courses.findById(id)
+      .then((course) =>
+        res.render("courses/edit", {
+          course: mongooseToObject(course),
+        })
+      )
+      .catch(next);
+  }
+
+  //[PUT] /courses/:id
+  update(req, res, next) {
+    const id = req.params.id;
+    const formValue = req.body;
+    Courses.updateOne({ _id: id }, formValue)
+      .then(() => res.redirect("/me/stored/courses"))
+      .catch(next);
   }
 }
 
