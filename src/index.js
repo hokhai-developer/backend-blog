@@ -19,7 +19,7 @@ app.use(express.urlencoded({ extended: true }));
 // override with POST having ?_method=DELETE
 app.use(methodOverride("_method"));
 // HTTP logger
-// app.use(morgan("combined"));
+app.use(morgan("combined"));
 // Template engine
 app.engine(
   "hbs",
