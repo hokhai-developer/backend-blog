@@ -1,6 +1,5 @@
 const Courses = require("../models/Course");
 const { mongooseToObject } = require("../../util/mongoose");
-const { renderSync } = require("node-sass");
 
 class CourseController {
   //[GET] /courses/create
@@ -10,11 +9,11 @@ class CourseController {
 
   //[POST] /courses/store
   store(req, res, next) {
-    const formData = req.body;
+    const formData = { ...req.body };
     formData.image = `https://img.youtube.com/vi/${formData.videoId}/sddefault.jpg`;
 
     Courses.create(formData)
-      .then((course) => res.redirect(`${course.slug}`))
+      .then((course) => res.redirect("/me/stored/courses"))
       .catch((error) => res.send("fail"));
   }
 
@@ -54,7 +53,22 @@ class CourseController {
   //[PUT] /courses/:id
   destroy(req, res, next) {
     const id = req.params.id;
+    Courses.delete({ _id: id })
+      .then(() => res.redirect("back"))
+      .catch(next);
+  }
+  //[PUT] /courses/:id/force
+  forceDestroy(req, res, next) {
+    const id = req.params.id;
     Courses.deleteOne({ _id: id })
+      .then(() => res.redirect("back"))
+      .catch(next);
+  }
+
+  //[PATCH] /courses/:id/restore
+  restore(req, res, next) {
+    const id = req.params.id;
+    Courses.restore({ _id: id })
       .then(() => res.redirect("back"))
       .catch(next);
   }
